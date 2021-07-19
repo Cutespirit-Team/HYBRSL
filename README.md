@@ -10,6 +10,8 @@ A Discord bot which made by Tershi. 一個由哈密瓜製作的Discord機器人
 | 早安 | 對你說:早安 |
 | 晚安 | 對你說:晚安 |
 | 我好棒,我好帥,我好可愛 |信息被刪除並且回復 |
+|/clear 參數| 清除信息|
+|/kick @people| 踢人|
 
 
 [![Build Status](http://img.shields.io/travis/badges/badgerbadgerbadger.svg?style=flat-square)](https://travis-ci.org/badges/badgerbadgerbadger)
