@@ -5,7 +5,7 @@ from discord.ext import commands
 #client 是我們與 Discord 連結的橋樑
 
 #設定檔
-TOKEN='ODY2NTQ1MzAwMjgxNjIyNTI4.YPUHMw.ESwYKLgpA6C9qtTcdaAl0puSE9Y'
+TOKEN='YOUR TOKEN'
 client = commands.Bot(command_prefix='!')
 
 @client.event
