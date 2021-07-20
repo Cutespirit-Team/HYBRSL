@@ -5,14 +5,25 @@ A Discord bot which made by Tershi. 一個由哈密瓜製作的Discord機器人
 
 | 用法： /指令 | [選項...] [參數...] |
 |-----|-----|
-| /say | 請bot 說你打的字 (要加參數) |
-| /狀態 | 更改bot 狀態 (要加參數) |
-| 早安 | 對你說:早安 |
-| 晚安 | 對你說:晚安 |
-| 我好棒,我好帥,我好可愛 |信息被刪除並且回復 |
-|/clear 參數| 清除信息|
-|!kick @people| 踢人|
-
+|/say 參數| ---說|             
+|/menu |選單   | 
+|早安 |回覆早安|
+| 晚安 |回覆晚安|
+|笨蛋 |回覆對不起啦...|
+|我好帥,我好可愛,我好棒|刪除信息並回覆|
+|!weareroc 中華民國|
+|!狀態 參數 改變bot狀態|
+|!kick USER | 踢掉使用者|
+|!ban USER | 封鎖使用者|
+|!unban USER | 解封使用者|
+|!join | 加入到語音頻道|
+|!leabe|從語音頻道離開|
+|!play URL | 播放YouTube音樂|
+|!pause | 暫停播放YouTube音樂|
+|!resume | 恢復播放YouTube音樂|
+|!stop | 停止播放YouTube音樂|
+             
+                
 
 [![Build Status](http://img.shields.io/travis/badges/badgerbadgerbadger.svg?style=flat-square)](https://travis-ci.org/badges/badgerbadgerbadger)
 
