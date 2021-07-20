@@ -9,16 +9,18 @@ from dotenv import load_dotenv
 from discord import FFmpegPCMAudio
 from youtube_dl import YoutubeDL
 from discord.utils import get
+import time
 
 
 #client 是我們與 Discord 連結的橋樑
 
 #設定檔
-TOKEN='YOUR TOKEN'
+TOKEN='ODY2NTQ1MzAwMjgxNjIyNTI4.YPUHMw.78GiB5ql0d_hxjV5ngWAeg4vaPE'
 intents = discord.Intents().all()
 client = discord.Client(intents=intents)
 client = commands.Bot(command_prefix='!')
 players = {}
+localtime = time.localtime(time.time())
 
 @client.event
 async def on_ready():
@@ -39,24 +41,37 @@ async def on_message(message):
 
     if message.content =='晚安':
         await message.channel.send('晚安')
+    if message.content =='!time':
+        await message.channel.send (time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) )
 
     if message.content =='笨蛋':
         await message.channel.send('對不起啦....')
-    if message.content =='/weareroc':
+    if message.content =='!weareroc':
         await message.channel.send('中華民國萬歲，三民主義統一中國，我們是自由民主中國。')
-    if message.content =='/menu' or message.content == '/選單':
+    if message.content =='!menu' or message.content == '!選單':
         text= '''/say 參數 ---說
                  /menu 選單    
                  早安 回覆早安
                  晚安 回覆晚安
                  笨蛋 回覆對不起啦...
                  我好帥,我好可愛,我好棒-刪除信息並回覆
-                 /weareroc 中華民國
-                 /狀態 參數 改變bot狀態'''
+                 !weareroc 中華民國
+                 !狀態 參數 改變bot狀態
+                 !kick USER | 踢掉使用者
+                 !ban USER | 封鎖使用者
+                 !unban USER | 解封使用者
+                 !join | 加入到語音頻道
+                 !leabe|從語音頻道離開
+                 !play URL | 播放YouTube音樂
+                 !pause | 暫停播放YouTube音樂
+                 !resume | 恢復播放YouTube音樂
+                 !stop | 停止播放YouTube音樂
+                 '''
+
         
         await message.channel.send(text)
 
-    if message.content.startswith('/狀態'):
+    if message.content.startswith('!狀態'):
         tmp = message.content.split(' ')
         text = ''
         for i in range(1,len(tmp)):
@@ -71,7 +86,7 @@ async def on_message(message):
     #然後回傳訊息
         await message.channel.send('不好意思，不要騙人啦') 
        
-    if message.content.startswith('/say'):   #如果以「說」開頭
+    if message.content.startswith('!say'):   #如果以「說」開頭
     #分割訊息成兩份
         tmp = message.content.split(" ")
         if '--showme' in tmp:
@@ -82,7 +97,22 @@ async def on_message(message):
         else:
             await message.channel.send(tmp[1])
     await client.process_commands(message)
-        
+@client.command(name='+')
+async def add(ctx ,x,y):
+    await ctx.send(int(x)+int(y))
+
+@client.command(name='-')
+async def add(ctx ,x,y):
+    await ctx.send(int(x)-int(y))
+
+@client.command(name='*')
+async def add(ctx ,x,y):
+    await ctx.send(int(x)*int(y))
+
+@client.command(name='/')
+async def add(ctx ,x,y):
+    await ctx.send(int(x)/int(y))    
+
 @client.command(name='clear')
 async def clear(ctx ,num:int):
     print('cleared')
@@ -167,6 +197,25 @@ async def stop(ctx):
     if voice.is_playing():
         voice.stop()
         await ctx.send('停止中...')
+
+@client.command()
+async def about(ctx):
+    embed=discord.Embed(title="About ", url="https://github.com/Cutespirit-Team/HYBRSL", description="關於此機器人", color=0x4b7e7e)
+    embed.set_author(name="哈密瓜", url="http://hybrsl.tk/me/", icon_url="https://hybrsl.tk/cute.jpg")
+    embed.set_thumbnail(url="https://hybrsl.tk/cute.jpg")
+    embed.add_field(name="開發日期", value="2021/07/19", inline=True)
+    embed.add_field(name="目前版本", value="v0.3", inline=True)
+    embed.add_field(name="幫助", value="/選單", inline=True)
+    embed.add_field(name="語言", value="python3", inline=True)
+    embed.add_field(name="目前運行系統", value="kali linux", inline=True)
+    embed.add_field(name="最想說的話", value="早安~~~", inline=True)
+    embed.add_field(name="關於作者", value=":", inline=True)
+    embed.add_field(name="網路稱號", value="哈密瓜", inline=True)
+    embed.add_field(name="目前年齡", value="15", inline=True)
+    embed.add_field(name="年級", value="升高一", inline=True)
+    embed.add_field(name="創作心得", value="這是我一直看教學還有大神的幫助弄出來的 原創性20趴 嗯我好棒", inline=True)
+    embed.set_footer(text="撰寫日期2021/07/20")
+    await ctx.send(embed=embed)
 
 
 
