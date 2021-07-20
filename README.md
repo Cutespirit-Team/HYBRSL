@@ -11,8 +11,8 @@ A Discord bot which made by Tershi. 一個由哈密瓜製作的Discord機器人
 | 晚安 |回覆晚安|
 |笨蛋 |回覆對不起啦...|
 |我好帥,我好可愛,我好棒|刪除信息並回覆|
-|!weareroc 中華民國|
-|!狀態 參數 改變bot狀態|
+|!weareroc |中華民國|
+|!狀態 參數| 改變bot狀態|
 |!kick USER | 踢掉使用者|
 |!ban USER | 封鎖使用者|
 |!unban USER | 解封使用者|
