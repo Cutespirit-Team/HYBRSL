@@ -205,7 +205,7 @@ async def about(ctx):
     embed.set_thumbnail(url="https://hybrsl.tk/cute.jpg")
     embed.add_field(name="開發日期", value="2021/07/19", inline=True)
     embed.add_field(name="目前版本", value="v0.3", inline=True)
-    embed.add_field(name="幫助", value="/選單", inline=True)
+    embed.add_field(name="幫助", value="!選單", inline=True)
     embed.add_field(name="語言", value="python3", inline=True)
     embed.add_field(name="目前運行系統", value="kali linux", inline=True)
     embed.add_field(name="最想說的話", value="早安~~~", inline=True)
