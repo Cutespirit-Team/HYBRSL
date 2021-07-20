@@ -15,7 +15,7 @@ import time
 #client 是我們與 Discord 連結的橋樑
 
 #設定檔
-TOKEN='ODY2NTQ1MzAwMjgxNjIyNTI4.YPUHMw.78GiB5ql0d_hxjV5ngWAeg4vaPE'
+TOKEN='YOUR TOKEN'
 intents = discord.Intents().all()
 client = discord.Client(intents=intents)
 client = commands.Bot(command_prefix='!')
