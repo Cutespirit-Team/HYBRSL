@@ -5,7 +5,6 @@ import youtube_dl
 import subprocess
 from discord.ext import commands
 import os
-from dotenv import load_dotenv
 from discord import FFmpegPCMAudio
 from youtube_dl import YoutubeDL
 from discord.utils import get
@@ -15,7 +14,7 @@ import time
 #client 是我們與 Discord 連結的橋樑
 
 #設定檔
-TOKEN='YOUR TOKEN'
+TOKEN='YORR TONEK'
 intents = discord.Intents().all()
 client = discord.Client(intents=intents)
 client = commands.Bot(command_prefix='!')
@@ -49,8 +48,9 @@ async def on_message(message):
     if message.content =='!weareroc':
         await message.channel.send('中華民國萬歲，三民主義統一中國，我們是自由民主中國。')
     if message.content =='!menu' or message.content == '!選單':
-        text= '''/say 參數 ---說
-                 /menu 選單    
+        text= '''
+                --------- !say 參數 ---說
+                 !menu 選單    
                  早安 回覆早安
                  晚安 回覆晚安
                  笨蛋 回覆對不起啦...
@@ -66,18 +66,23 @@ async def on_message(message):
                  !pause | 暫停播放YouTube音樂
                  !resume | 恢復播放YouTube音樂
                  !stop | 停止播放YouTube音樂
-                 '''
+                 !+ num num 加法
+                 !- num num 減法
+                 !* num num 乘法
+                 !/ num num 除法
+                 !time 時間'''
 
         
         await message.channel.send(text)
-
+          
     if message.content.startswith('!狀態'):
-        tmp = message.content.split(' ')
-        text = ''
-        for i in range(1,len(tmp)):
-            text = text + str(tmp[i])
-        game = discord.Game(text)
-        await client.change_presence(status=discord.Status.idle, activity=game)
+      
+      tmp = message.content.split(' ')
+      text = ''
+      for i in range(1,len(tmp)):
+          text = text + str(tmp[i])
+      game = discord.Game(text)
+      await client.change_presence(status=discord.Status.idle, activity=game)
     #discord.Status.<狀態>，可以是online,offline,idle,dnd,invisible
 
     if message.content == '我好帥' or message.content == '我好棒' or message.content =='我好可愛':
@@ -90,7 +95,7 @@ async def on_message(message):
     #分割訊息成兩份
         tmp = message.content.split(" ")
         if '--showme' in tmp:
-            await message.channel.send( '你說:' + tmp[0] + f'我是:{self.user}')
+          await message.channel.send( '你說:' + tmp[0] + f'我是:({self.user}')
           #如果分割後串列長度只有0
         if len(tmp) == 0:
             await message.channel.send("你要我工三小??")
@@ -114,18 +119,22 @@ async def add(ctx ,x,y):
     await ctx.send(int(x)/int(y))    
 
 @client.command(name='clear')
+@commands.has_any_role('版主', '工程師')
 async def clear(ctx ,num:int):
     print('cleared')
     await ctx.channel.purge(limit=num+1)
 @client.command(name='kick')
+@commands.has_any_role('版主')
 async def kick(ctx, member : discord.Member, *,reason=None):
     await member.kick(reason=reason)
 @client.command(name='ban')
+@commands.has_any_role('版主')
 async def ban(ctx,member : discord.Member, *,reason=None):
     await member.ban(reason=reason)
     await ctx.send('完成操作')
 
 @client.command(name='unban')
+@commands.has_any_role('版主')
 async def unban(ctx,*,member):
     banned_users =await ctx.guild.bans()
     member_name, member_discriminator = member.split('#')
@@ -216,7 +225,31 @@ async def about(ctx):
     embed.add_field(name="創作心得", value="這是我一直看教學還有大神的幫助弄出來的 原創性20趴 嗯我好棒", inline=True)
     embed.set_footer(text="撰寫日期2021/07/20")
     await ctx.send(embed=embed)
-
+@client.command()
+async def ping(ctx):
+  await ctx.send(f'{round(client.latency*1000)}(ms)')
+@client.command()
+async def 選單(ctx):
+    embed=discord.Embed(title="HYBRSL", url="https://github.com/Cutespirit-Team/HYBRSL", description="指令", color=0x281f56)
+    embed.set_author(name="指令列表", url="http://hybrsl.tk/me/", icon_url="https://hybrsl.tk/cute.jpg")
+    embed.set_thumbnail(url="https://hybrsl.tk/cute.jpg")
+    embed.add_field(name="DISCORD", value="指令區", inline=False)
+    embed.add_field(name="!kick ", value="踢掉使用者", inline=True)
+    embed.add_field(name="!ban ", value="封鎖使用者", inline=True)
+    embed.add_field(name="!unban ", value="解封使用者", inline=True)
+    embed.add_field(name="!join", value="加入到語音頻道", inline=True)
+    embed.add_field(name="!leave", value="從語音頻道離開", inline=True)
+    embed.add_field(name="!狀態 ", value="改變bot 狀態", inline=True)
+    embed.add_field(name="Youtube ", value="音樂指令", inline=False)
+    embed.add_field(name="!play ", value="播放(請先!join)", inline=True)
+    embed.add_field(name="!pause", value="暫停播放", inline=True)
+    embed.add_field(name="!resume", value="恢復播放", inline=True)
+    embed.add_field(name="!stop", value="停止播放", inline=True)
+    embed.add_field(name="計算機", value="+,-,*,/ 加減乘除  後面加兩個要運算的數字", inline=False)
+    embed.add_field(name="範例加法 1+1 ", value="指令!+ 1 1  ", inline=True)
+    embed.add_field(name="!time ", value="現在時間", inline=True)
+    embed.set_footer(text="更新日期7/21")
+    await ctx.send(embed=embed)
 
 
 
