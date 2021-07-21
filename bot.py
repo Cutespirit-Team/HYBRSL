@@ -14,16 +14,16 @@ import time
 #client 是我們與 Discord 連結的橋樑
 
 #設定檔
-TOKEN='YORR TONEK'
+TOKEN='ODY2NTQ1MzAwMjgxNjIyNTI4.YPUHMw.95sT4GNxujSjYOcjB_-2jyZCyts'
 intents = discord.Intents().all()
-# client = discord.Client(intents=intents)
+client = discord.Client(intents=intents)
 client = commands.Bot(command_prefix='!')
 players = {}
 localtime = time.localtime(time.time())
 
 @client.event
 async def on_ready():
-    print('登入成功')
+    print('bot已經登入')
 
 @client.event
 async def on_message(message):
@@ -101,15 +101,7 @@ async def on_message(message):
             await message.channel.send("你要我工三小??")
         else:
             await message.channel.send(tmp[1])
-
-@client.event
-async def on_command_error(ctx, error):
-    if isinstance (error, commands.MissingPermissions):
-        await ctx.send('早安')
-        print('早安')
-    else:
-        print(error)
-    #await client.process_commands(message)
+    await client.process_commands(message)
 @client.command(name='+')
 async def add(ctx ,x,y):
     await ctx.send(int(x)+int(y))
@@ -131,12 +123,10 @@ async def add(ctx ,x,y):
 async def clear(ctx ,num:int):
     print('cleared')
     await ctx.channel.purge(limit=num+1)
-
 @client.command(name='kick')
 @commands.has_any_role('版主')
 async def kick(ctx, member : discord.Member, *,reason=None):
     await member.kick(reason=reason)
-
 @client.command(name='ban')
 @commands.has_any_role('版主')
 async def ban(ctx,member : discord.Member, *,reason=None):
@@ -161,7 +151,7 @@ async def unban(ctx,*,member):
 async def join(ctx):
     channel = ctx.author.voice.channel
     await channel.connect()
-    await ctx.send('Connected!')
+    await message.channel.send('Connected!')
     print('Connected')
 
 @client.command(pass_context=True)
@@ -260,6 +250,15 @@ async def 選單(ctx):
     embed.add_field(name="!time ", value="現在時間", inline=True)
     embed.set_footer(text="更新日期7/21")
     await ctx.send(embed=embed)
+
+
+
+
+
+
+
+
+
 
 
 client.run(TOKEN) #TOKEN 在剛剛 Discord Developer 那邊「BOT」頁面裡面
