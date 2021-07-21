@@ -5,10 +5,10 @@ A Discord bot which made by Tershi. 一個由哈密瓜製作的Discord機器人
 
 | 用法： /指令 | [選項...] [參數...] |
 |-----|-----|
-|/say 參數| ---說|             
-|/menu |選單   | 
+|!say 參數| ---說|             
+|!menu |選單   | 
 |早安 |回覆早安|
-| 晚安 |回覆晚安|
+|晚安 |回覆晚安|
 |笨蛋 |回覆對不起啦...|
 |我好帥,我好可愛,我好棒|刪除信息並回覆|
 |!weareroc |中華民國|
@@ -22,6 +22,8 @@ A Discord bot which made by Tershi. 一個由哈密瓜製作的Discord機器人
 |!pause | 暫停播放YouTube音樂|
 |!resume | 恢復播放YouTube音樂|
 |!stop | 停止播放YouTube音樂|
+|!選單|指令區|
+
              
                 
 
