@@ -8,22 +8,27 @@ import os
 from discord import FFmpegPCMAudio
 from youtube_dl import YoutubeDL
 from discord.utils import get
+from discord_slash.utils.manage_commands import create_choice, create_option
+from discord_slash import SlashCommand
 import time
 
 
 #client 是我們與 Discord 連結的橋樑
 
 #設定檔
-TOKEN='YOR TOKEN'
+TOKEN='ODY2NTQ1MzAwMjgxNjIyNTI4.YPUHMw.SgUcPla07tp0GdW7w2AKnFZDrYU'
 intents = discord.Intents().all()
 client = discord.Client(intents=intents)
 client = commands.Bot(command_prefix='!')
 players = {}
 localtime = time.localtime(time.time())
+slash = SlashCommand(client, sync_commands=True) 
 
 @client.event
 async def on_ready():
     print('bot已經登入')
+
+
 
 @client.event
 async def on_message(message):
@@ -40,14 +45,11 @@ async def on_message(message):
 
     if message.content =='晚安':
         await message.channel.send('晚安')
-    if message.content =='!time':
-        await message.channel.send (time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) )
-
+    
     if message.content =='笨蛋':
         await message.channel.send('對不起啦....')
-    if message.content =='!weareroc':
-        await message.channel.send('中華民國萬歲，三民主義統一中國，我們是自由民主中國。')
-    if message.content =='!menu' or message.content == '!選單':
+
+    if message.content =='/menu' or message.content == '/選單':
         text= '''
                 --------- !say 參數 ---說
                  !menu 選單    
@@ -71,11 +73,13 @@ async def on_message(message):
                  !* num num 乘法
                  !/ num num 除法
                  !time 時間'''
+    if message.content =='/nowtime':
+        await message.channel.send (time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) )
 
         
         await message.channel.send(text)
           
-    if message.content.startswith('!狀態'):
+    if message.content.startswith('/狀態'):
       
       tmp = message.content.split(' ')
       text = ''
@@ -91,7 +95,7 @@ async def on_message(message):
     #然後回傳訊息
         await message.channel.send('不好意思，不要騙人啦') 
        
-    if message.content.startswith('!say'):   #如果以「說」開頭
+    if message.content.startswith('/say'):   #如果以「說」開頭
     #分割訊息成兩份
         tmp = message.content.split(" ")
         if '--showme' in tmp:
@@ -102,38 +106,45 @@ async def on_message(message):
         else:
             await message.channel.send(tmp[1])
     await client.process_commands(message)
-@client.command(name='+')
-async def add(ctx ,x,y):
-    await ctx.send(int(x)+int(y))
 
-@client.command(name='-')
+@slash.slash(description='加法')
 async def add(ctx ,x,y):
-    await ctx.send(int(x)-int(y))
+    await ctx.send(str(int(x)+int(y)))
 
-@client.command(name='*')
-async def add(ctx ,x,y):
-    await ctx.send(int(x)*int(y))
+@slash.slash(description='減法')
+async def cut(ctx ,x,y):
+    await ctx.send(str(int(x)*int(y)))
 
-@client.command(name='/')
-async def add(ctx ,x,y):
-    await ctx.send(int(x)/int(y))    
+@slash.slash(description='乘法')
+async def times(ctx ,x,y):
+    await ctx.send(str(int(x)*int(y)))   
 
-@client.command(name='clear')
-@commands.has_any_role('版主', '工程師')
-async def clear(ctx ,num:int):
+@slash.slash(description='除法')
+async def into(ctx ,x,y):
+    await ctx.send(str(int(x)/int(y)))   
+
+@slash.slash(description='延遲')
+async def ping(ctx):
+    await ctx.send(f'{round(client.latency*1000)}(ms)')
+
+@slash.slash(description='清除信息')
+
+async def clear(ctx, num):
     print('cleared')
-    await ctx.channel.purge(limit=num+1)
-@client.command(name='kick')
+    await ctx.channel.purge(limit=int(num)+1)
+    await ctx.send('成功刪除')
+
+@slash.slash(description='踢人')
 @commands.has_any_role('版主')
 async def kick(ctx, member : discord.Member, *,reason=None):
     await member.kick(reason=reason)
-@client.command(name='ban')
+@slash.slash(description='封鎖人')
 @commands.has_any_role('版主')
 async def ban(ctx,member : discord.Member, *,reason=None):
     await member.ban(reason=reason)
     await ctx.send('完成操作')
 
-@client.command(name='unban')
+@slash.slash(description='解除封鎖人')
 @commands.has_any_role('版主')
 async def unban(ctx,*,member):
     banned_users =await ctx.guild.bans()
@@ -147,24 +158,22 @@ async def unban(ctx,*,member):
             await ctx.send('成功')
             return
 
-@client.command(pass_context=True)
+@slash.slash(description='加入語音頻道')
 async def join(ctx):
     channel = ctx.author.voice.channel
     await channel.connect()
-    await message.channel.send('Connected!')
+    await ctx.send('進入到語音頻道')
     print('Connected')
 
-@client.command(pass_context=True)
+@slash.slash(description='離開語音頻道')
 async def leave(ctx):
-    if (ctx.voice_client): # If the bot is in a voice channel 
+    if (ctx.guild.voice_client): # If the bot is in a voice channel 
         await ctx.guild.voice_client.disconnect() # Leave the channel
         await ctx.send('我先離開瞜!')
         print('Bot left')
-    else: # But if it isn't
-        await ctx.send("I'm not in a voice channel, use the join command to make me join")
-        print("I'm not in a voice channel, use the join command to make me join")
+    
 
-@client.command(pass_context=True)
+@slash.slash(description='播放')
 async def play(ctx, url):
     YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist': 'True'}
     FFMPEG_OPTIONS = {
@@ -179,7 +188,7 @@ async def play(ctx, url):
         voice.is_playing()
         await ctx.send('正在播放')
 
-@client.command()
+@slash.slash(description='繼續播放')
 async def resume(ctx):
     voice = get(client.voice_clients, guild=ctx.guild)
 
@@ -189,7 +198,7 @@ async def resume(ctx):
 
 
 # command to pause voice if it is playing
-@client.command()
+@slash.slash(description='暫停')
 async def pause(ctx):
     voice = get(client.voice_clients, guild=ctx.guild)
 
@@ -199,7 +208,7 @@ async def pause(ctx):
 
 
 # command to stop voice
-@client.command()
+@slash.slash(description='停止')
 async def stop(ctx):
     voice = get(client.voice_clients, guild=ctx.guild)
 
@@ -207,7 +216,7 @@ async def stop(ctx):
         voice.stop()
         await ctx.send('停止中...')
 
-@client.command()
+@slash.slash(description='關於')
 async def about(ctx):
     embed=discord.Embed(title="About ", url="https://github.com/Cutespirit-Team/HYBRSL", description="關於此機器人", color=0x4b7e7e)
     embed.set_author(name="哈密瓜", url="http://hybrsl.tk/me/", icon_url="https://hybrsl.tk/cute.jpg")
@@ -225,31 +234,34 @@ async def about(ctx):
     embed.add_field(name="創作心得", value="這是我一直看教學還有大神的幫助弄出來的 原創性20趴 嗯我好棒", inline=True)
     embed.set_footer(text="撰寫日期2021/07/20")
     await ctx.send(embed=embed)
-@client.command()
-async def ping(ctx):
-  await ctx.send(f'{round(client.latency*1000)}(ms)')
-@client.command()
+#@client.command()
+#async def ping(ctx):
+#  await ctx.send(f'{round(client.latency*1000)}(ms)')
+@slash.slash(description='選單')
 async def 選單(ctx):
     embed=discord.Embed(title="HYBRSL", url="https://github.com/Cutespirit-Team/HYBRSL", description="指令", color=0x281f56)
     embed.set_author(name="指令列表", url="http://hybrsl.tk/me/", icon_url="https://hybrsl.tk/cute.jpg")
     embed.set_thumbnail(url="https://hybrsl.tk/cute.jpg")
     embed.add_field(name="DISCORD", value="指令區", inline=False)
-    embed.add_field(name="!kick ", value="踢掉使用者", inline=True)
-    embed.add_field(name="!ban ", value="封鎖使用者", inline=True)
-    embed.add_field(name="!unban ", value="解封使用者", inline=True)
-    embed.add_field(name="!join", value="加入到語音頻道", inline=True)
-    embed.add_field(name="!leave", value="從語音頻道離開", inline=True)
-    embed.add_field(name="!狀態 ", value="改變bot 狀態", inline=True)
+    embed.add_field(name="/kick ", value="踢掉使用者", inline=True)
+    embed.add_field(name="/ban ", value="封鎖使用者", inline=True)
+    embed.add_field(name="/unban ", value="解封使用者", inline=True)
+    embed.add_field(name="/join", value="加入到語音頻道", inline=True)
+    embed.add_field(name="/leave", value="從語音頻道離開", inline=True)
+    embed.add_field(name="/狀態 ", value="改變bot 狀態", inline=True)
     embed.add_field(name="Youtube ", value="音樂指令", inline=False)
-    embed.add_field(name="!play ", value="播放(請先!join)", inline=True)
-    embed.add_field(name="!pause", value="暫停播放", inline=True)
-    embed.add_field(name="!resume", value="恢復播放", inline=True)
-    embed.add_field(name="!stop", value="停止播放", inline=True)
-    embed.add_field(name="計算機", value="+,-,*,/ 加減乘除  後面加兩個要運算的數字", inline=False)
-    embed.add_field(name="範例加法 1+1 ", value="指令!+ 1 1  ", inline=True)
-    embed.add_field(name="!time ", value="現在時間", inline=True)
+    embed.add_field(name="/play ", value="播放(請先/join)", inline=True)
+    embed.add_field(name="/pause", value="暫停播放", inline=True)
+    embed.add_field(name="/resume", value="恢復播放", inline=True)
+    embed.add_field(name="/stop", value="停止播放", inline=True)
+    embed.add_field(name="計算機", value="add,cut,times,into加減乘除  後面加兩個要運算的數字", inline=False)
+    embed.add_field(name="範例加法 /add ", value="指令/add num num  ", inline=True)
+    embed.add_field(name="/nowtime ", value="現在時間", inline=True)
     embed.set_footer(text="更新日期7/21")
     await ctx.send(embed=embed)
+@slash.slash(description='中華民國') 
+async def weareroc(ctx):
+    await ctx.send('中華民國萬歲，三民主義統一中國，我們是自由民主中國。')
 
 
 
