@@ -69,7 +69,7 @@ A Discord bot which made by Tershi. 一個由哈密瓜製作的Discord機器人
 
 ## 關於我們 About Us
 
-[Team Website](www.tershi.ml) <br>
+[Team Website](https://www.cutespirit.org) <br>
 [哈密瓜個人web](https://hybrsl.tk/me) <br>
 [哈密瓜 Facebook](https://www.facebook.com/shanling.team/) <br>
 [哈密瓜 YouTube](https://www.youtube.com/channel/UCet_gHUIfoGs3uQaKc-OxCQ) <br>
